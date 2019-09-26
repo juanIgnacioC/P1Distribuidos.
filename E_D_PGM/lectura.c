@@ -1,5 +1,10 @@
 // lectura.c   (Creado por Rodrigo Pavez M)
 #include <stdio.h>
+#include "mpi.h"
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <time.h>
 
 /* Programa que permite la lectura y generacion de archivos en formato PGM
 Este formato tiene la siguiente estructura:
@@ -12,6 +17,20 @@ los ascii correspondientes a la cantidad ancho x alto pixeles.
 
 main()
 {
+    int         my_rank;       /* rank of process (Se guardara el id de este proceso)     */
+    int         n;             /* number of processes (Se almacena la cantidad de procesos) */
+//     int size = 10;
+//     int buffer[size];
+    srand(time(NULL));   // Initialization, should only be called once.
+
+    /* Start up MPI */
+    MPI_Init(&argc, &argv);
+
+    /* Find out process rank (Id del proceso) */
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    /* Find out number of processes (cantidad de procesos) */
+    MPI_Comm_size(MPI_COMM_WORLD, &n);
+    
 	FILE *arch,*sali;
 	unsigned char c,c1,c2;
 	int fila, colu, i, j, gris;
@@ -47,6 +66,7 @@ main()
 		}
 	}
 
+	
 // Proceso	- Erosion
 	for(i=1; i<fila-1; i++){
 		for(j=1; j<colu-1; j++){
@@ -78,6 +98,8 @@ main()
 			fprintf(sali,"%c",otra[i][j]);
 		}
 	}
+	
+	
 	// Dilatacion
 	for(i=1; i<fila-1; i++){
 		for(j=1; j<colu-1; j++){

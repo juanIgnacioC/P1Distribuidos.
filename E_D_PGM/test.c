@@ -73,16 +73,6 @@ main(int argc, char* argv[]) {
 		}
 	}
     
-    /*unsigned char **alloc_2d_int(int rows, int cols) {
-    unsigned char *data = (unsigned char *)malloc(rows*cols*sizeof(int));
-    unsigned char **array= (unsigned char **)malloc(rows*sizeof(int*));
-    for (int i=0; i<rows; i++)
-        array[i] = &(data[cols*i]);
-
-    return array;
-}*/
-
-
 
     //CLIENTE
     if(my_rank == 1){
@@ -91,9 +81,7 @@ main(int argc, char* argv[]) {
         // Proceso	- Erosion
         int rango1 = (fila)/2;
         unsigned char local1[rango1][(colu-1)];
-        //unsigned char **local1 = alloc_2d_int(rango1,(colu-1));
-        int a = 0;
-        int b = 0;
+        
         for(i=1; i<rango1; i++){
             for(j=1; j<colu-1; j++){
                 int min =255;
@@ -111,66 +99,51 @@ main(int argc, char* argv[]) {
                 }
 //                 printf("minimo: %d\n", min);
                 local1[i][j]=min;
-                b++;
             }
-            b = 0;
-        a++;
         }
 //         Mandar la matriz
-         MPI_Send(local1, rango1*(colu-1), MPI_UNSIGNED_CHAR, 0, 0, MPI_COMM_WORLD);
+         MPI_Send(&(local1), rango1*(colu-1), MPI_INT, 0, 0, MPI_COMM_WORLD);
             
     }
         
-    /*if(my_rank == 2){ 
+    if(my_rank == 2){
         
             int rango2 = (fila)/2;
             printf("%d segunda parte matriz\n", my_rank);
-            //unsigned char local2[(rango2+1)][(colu-1)];
-            unsigned char **local2 = alloc_2d_int(rango2,(colu-1));
+            unsigned char local2[(rango2+1)][(colu-1)];
             
-            
-            int a = 0;
-            int b = 0;
-            
-            for(i=rango2; i<fila-1; i++){
-                for(j=1; j<colu-1; j++){
-                    int min =255;
-                    int k[5];
-                    k[0] = dibu[i][j-1];
-                    k[1] = dibu[i-1][j];
-                    k[2] = dibu[i][j];
-                    k[3] = dibu[i][j+1];
-                    k[4] = dibu[i+1][j];
-                    int l;
-                    for(l=0;l<5;l++){
-                        if(k[l]<min){
-                            min = k[l];
-                        }
+            for(i=rango2 + 1; i<fila-1; i++){
+            for(j=1; j<colu-1; j++){
+                int min =255;
+                int k[5];
+                k[0] = dibu[i][j-1];
+                k[1] = dibu[i-1][j];
+                k[2] = dibu[i][j];
+                k[3] = dibu[i][j+1];
+                k[4] = dibu[i+1][j];
+                int l;
+                for(l=0;l<5;l++){
+                    if(k[l]<min){
+                        min = k[l];
                     }
-                    local2[a][b]=min;
-                    b++;
                 }
-                b = 0; 
-                a++;
+                local2[i][j]=min;
+            }
+            
         }
         //         Mandar la matriz
-        MPI_Send(&(local2[0][0]), rango2*(colu-1), MPI_UNSIGNED_CHAR, 0, 0, MPI_COMM_WORLD);
+        MPI_Send(&(local2), rango2*(colu-1), MPI_INT, 0, 0, MPI_COMM_WORLD);
     }
         
         
 
-    */
-    
-    
-    
-    
     //SERVIDOR
     if(my_rank == 0){
         printf("%d recibe resultado matriz\n", my_rank);
 //         recibe lass dos matrices y las guarda
         unsigned char local1[1000][10000], local2[1000][10000];
         
-         MPI_Recv(local1, (fila)/2*(colu-1), MPI_UNSIGNED_CHAR, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+         MPI_Recv(&local1, (fila)/2, MPI_INT, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
          //printf("servidor: %d\n", local1[0][0]);
          int rango1 = (fila)/2;
          for(i=1; i<rango1; i++){
@@ -183,19 +156,19 @@ main(int argc, char* argv[]) {
          
          
          
-         /*MPI_Recv(&local2, (fila)/2, MPI_UNSIGNED_CHAR, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+         MPI_Recv(&local2, (fila)/2, MPI_INT, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
          //printf("servidor: %d\n", local2[0][0]);
         int rango2 = (fila)/2;
         printf("%d segunda parte matriz\n", my_rank);
         
-        for(i=rango2; i<fila-1; i++){
+        for(i=rango2 + 1; i<fila-1; i++){
         for(j=1; j<colu-1; j++){
             otra[i][j]=local2[i][j];
             }
         
         }
         printf("servidor: %d\n", otra[0][0]);
-        printf("servidor: %d\n", local1[0][0]);*/
+        printf("servidor: %d\n", local1[0][0]);
         
         
     }

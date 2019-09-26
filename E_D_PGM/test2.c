@@ -72,28 +72,16 @@ main(int argc, char* argv[]) {
 			otra[i][j] = c;
 		}
 	}
+	printf("matrizComienzo!!!: %d\n", otra[1][1]);
     
-    /*unsigned char **alloc_2d_int(int rows, int cols) {
-    unsigned char *data = (unsigned char *)malloc(rows*cols*sizeof(int));
-    unsigned char **array= (unsigned char **)malloc(rows*sizeof(int*));
-    for (int i=0; i<rows; i++)
-        array[i] = &(data[cols*i]);
-
-    return array;
-}*/
-
-
 
     //CLIENTE
     if(my_rank == 1){
         printf("%d primera parte matriz\n", my_rank);
+        unsigned char local1[1000][1000];
         
         // Proceso	- Erosion
         int rango1 = (fila)/2;
-        unsigned char local1[rango1][(colu-1)];
-        //unsigned char **local1 = alloc_2d_int(rango1,(colu-1));
-        int a = 0;
-        int b = 0;
         for(i=1; i<rango1; i++){
             for(j=1; j<colu-1; j++){
                 int min =255;
@@ -105,99 +93,98 @@ main(int argc, char* argv[]) {
                 k[4] = dibu[i+1][j];
                 int l;
                 for(l=0;l<5;l++){
+                    //printf("k: %d", k[l]);
                     if(k[l]<min){
                         min = k[l];
                     }
                 }
 //                 printf("minimo: %d\n", min);
                 local1[i][j]=min;
-                b++;
+                
+                    //printf("%d primin\n", min);
             }
-            b = 0;
-        a++;
         }
 //         Mandar la matriz
-         MPI_Send(local1, rango1*(colu-1), MPI_UNSIGNED_CHAR, 0, 0, MPI_COMM_WORLD);
+            MPI_Send(local1, rango1*(colu-1), MPI_UNSIGNED_CHAR, 0, 0, MPI_COMM_WORLD);
             
     }
         
-    /*if(my_rank == 2){ 
+    if(my_rank == 2){
+        printf("%d segundaparte matriz\n", my_rank);
         
-            int rango2 = (fila)/2;
-            printf("%d segunda parte matriz\n", my_rank);
-            //unsigned char local2[(rango2+1)][(colu-1)];
-            unsigned char **local2 = alloc_2d_int(rango2,(colu-1));
-            
-            
-            int a = 0;
-            int b = 0;
-            
-            for(i=rango2; i<fila-1; i++){
-                for(j=1; j<colu-1; j++){
-                    int min =255;
-                    int k[5];
-                    k[0] = dibu[i][j-1];
-                    k[1] = dibu[i-1][j];
-                    k[2] = dibu[i][j];
-                    k[3] = dibu[i][j+1];
-                    k[4] = dibu[i+1][j];
-                    int l;
-                    for(l=0;l<5;l++){
-                        if(k[l]<min){
-                            min = k[l];
-                        }
+        
+        
+        unsigned char local2[1000][1000];
+        
+        // Proceso	- Erosion
+        int rango2 = (fila)/2;
+        for(i=rango2; i<fila-1; i++){
+            for(j=1; j<colu-1; j++){
+                int min =255;
+                int k[5];
+                k[0] = dibu[i][j-1];
+                k[1] = dibu[i-1][j];
+                k[2] = dibu[i][j];
+                k[3] = dibu[i][j+1];
+                k[4] = dibu[i+1][j];
+                int l;
+                for(l=0;l<5;l++){
+                    //printf("k: %d", k[l]);
+                    if(k[l]<min){
+                        min = k[l];
                     }
-                    local2[a][b]=min;
-                    b++;
                 }
-                b = 0; 
-                a++;
+//                 printf("minimo: %d\n", min);
+                local2[i][j]=min;
+                
+                    //printf("%d primin\n", min);
+            }
         }
-        //         Mandar la matriz
-        MPI_Send(&(local2[0][0]), rango2*(colu-1), MPI_UNSIGNED_CHAR, 0, 0, MPI_COMM_WORLD);
+//         Mandar la matriz
+            MPI_Send(local2, rango2*(colu-1), MPI_UNSIGNED_CHAR, 0, 0, MPI_COMM_WORLD);
     }
         
         
 
-    */
-    
-    
-    
-    
     //SERVIDOR
     if(my_rank == 0){
         printf("%d recibe resultado matriz\n", my_rank);
+        
 //         recibe lass dos matrices y las guarda
-        unsigned char local1[1000][10000], local2[1000][10000];
+        unsigned char local1[1000][1000], local2[1000][1000];
         
-         MPI_Recv(local1, (fila)/2*(colu-1), MPI_UNSIGNED_CHAR, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-         //printf("servidor: %d\n", local1[0][0]);
-         int rango1 = (fila)/2;
-         for(i=1; i<rango1; i++){
-            for(j=1; j<colu-1; j++){
-
-//                 printf("minimo: %d\n", min);
-                otra[i][j]=local1[i][j];
+        MPI_Recv(local1, (fila)/2*(colu-1), MPI_UNSIGNED_CHAR, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        printf("matrizservLocal11111111111: %d\n", local1[1][1]);
+                
+        
+        MPI_Recv(local2, (fila)/2*(colu-1), MPI_UNSIGNED_CHAR, 2, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        //printf("matrizservLocal2222222222: %d\n", local2[1][1]);
+        //printf("servPrev!!: %d\n", otra[174][1]);
+        
+        int rango1 = (fila)/2;
+        for(i=0; i<fila; i++){
+            for(j=0; j<colu; j++){
+                if(i < (rango1))
+                    otra[i][j] = local1[i][j];
+                else
+                    otra[i][j] = local2[i][j];
             }
         }
-         
-         
-         
-         /*MPI_Recv(&local2, (fila)/2, MPI_UNSIGNED_CHAR, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-         //printf("servidor: %d\n", local2[0][0]);
-        int rango2 = (fila)/2;
-        printf("%d segunda parte matriz\n", my_rank);
+        //printf("servFinalLocal2: %d\n", local2[1][1]);
+        //printf("servFinal!!: %d\n", otra[174][1]);
         
-        for(i=rango2; i<fila-1; i++){
-        for(j=1; j<colu-1; j++){
-            otra[i][j]=local2[i][j];
+        // Fin del Proceso	
+        sali=fopen("erosionTest.pgm","wb");
+        fprintf(sali,"P5\n");
+        fprintf(sali,"# Creado por Juan Cordero y Alvaro Elgueda. (2019)\n");
+        fprintf(sali,"%d %d\n",colu,fila);
+        fprintf(sali,"%d\n",gris);
+        for(i=0; i<fila; i++){
+            for(j=0; j<colu; j++)
+            {
+                fprintf(sali,"%c",otra[i][j]);
             }
-        
         }
-        printf("servidor: %d\n", otra[0][0]);
-        printf("servidor: %d\n", local1[0][0]);*/
-        
-        
     }
 
     /* Shut down MPI */
