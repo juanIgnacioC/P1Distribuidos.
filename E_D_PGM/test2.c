@@ -176,7 +176,7 @@ main(int argc, char* argv[]) {
         // Fin del Proceso	
         sali=fopen("erosionTest.pgm","wb");
         fprintf(sali,"P5\n");
-        fprintf(sali,"# Creado por Juan Cordero y Alvaro Elgueda. (2019)\n");
+        fprintf(sali,"# Creado por Juan Cordero y Alvaro Elgueda.\n");
         fprintf(sali,"%d %d\n",colu,fila);
         fprintf(sali,"%d\n",gris);
         for(i=0; i<fila; i++){
