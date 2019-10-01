@@ -81,8 +81,15 @@ main(int argc, char* argv[]) {
         
         // Proceso	- Erosion
         int rango1 = (fila)/2;
+        for(i=0; i<rango1; i++){
+            local1[i][0]=otra[i][0];
+        }
+        for(j=0; i<colu; j++){///////
+            local1[rango1][j]=otra[rango1][j];
+        }
+        
         for(i=1; i<rango1; i++){
-            for(j=1; j<colu-1; j++){
+            for(j=1; j<colu; j++){
                 int min =255;
                 int k[5];
                 k[0] = dibu[i][j-1];
@@ -105,7 +112,7 @@ main(int argc, char* argv[]) {
             }
         }
 //         Mandar la matriz
-            MPI_Send(local1, rango1*(colu-1), MPI_UNSIGNED_CHAR, 0, 0, MPI_COMM_WORLD);
+            MPI_Send(local1, fila/2*(colu), MPI_UNSIGNED_CHAR, 0, 0, MPI_COMM_WORLD);
             
     }
         
@@ -118,10 +125,16 @@ main(int argc, char* argv[]) {
         
         // Proceso	- Erosion
         int rango2 = (fila)/2;
-        local2[0][0] = dibu[rango2][0];
+        for(i=0; i<rango2; i++){
+            local2[i][0]=otra[i][0];
+        }
+        for(j=0; i<colu; j++){
+            local2[0][j]=otra[0][j];
+        }
+        //local2[0][0] = dibu[rango2][0];
         
-        for(i=rango2+1; i<fila-1; i++){
-            for(j=1; j<colu-1; j++){
+        for(i=rango2; i<fila; i++){
+            for(j=1; j<colu; j++){
                 int min =255;
                 int k[5];
                 k[0] = dibu[i][j-1];
@@ -145,7 +158,7 @@ main(int argc, char* argv[]) {
             }
         }
 //         Mandar la matriz
-            MPI_Send(local2, rango2*(colu-1), MPI_UNSIGNED_CHAR, 0, 0, MPI_COMM_WORLD);
+            MPI_Send(local2, fila/2*(colu), MPI_UNSIGNED_CHAR, 0, 0, MPI_COMM_WORLD);
     }
         
         
@@ -157,13 +170,12 @@ main(int argc, char* argv[]) {
 //         recibe lass dos matrices y las guarda
         unsigned char local1[1000][1000], local2[1000][1000];
         
-        MPI_Recv(local1, (fila)/2*(colu-1), MPI_UNSIGNED_CHAR, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        printf("matrizservLocal11111111111: %d\n", local1[1][1]);
+        MPI_Recv(local1, fila/2*(colu), MPI_UNSIGNED_CHAR, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        
                 
         
-        MPI_Recv(local2, (fila)/2*(colu-1), MPI_UNSIGNED_CHAR, 2, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        printf("matrizservLocal2222222222: %d\n", local2[1][1]);
-        //printf("servPrev!!: %d\n", otra[174][1]);
+        MPI_Recv(local2, fila/2*(colu), MPI_UNSIGNED_CHAR, 2, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        
         
         int rango1 = (fila)/2;
         for(i=0; i<fila; i++){
@@ -190,6 +202,8 @@ main(int argc, char* argv[]) {
                 fprintf(sali,"%c",otra[i][j]);
             }
         }
+        printf("\n");
+        printf("Archivo erosionNuevo.pgm satisfactoriamente creado\n");
     }
 
     /* Shut down MPI */

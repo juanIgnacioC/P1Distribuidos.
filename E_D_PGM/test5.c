@@ -72,7 +72,6 @@ main(int argc, char* argv[]) {
 			otra[i][j] = c;
 		}
 	}
-	printf("matrizComienzo!!!: %d\n", otra[1][1]);
     
 
     //CLIENTE
@@ -273,9 +272,7 @@ main(int argc, char* argv[]) {
         
 
         //RECIBEN   
-        MPI_Recv(local1, (fila)*(colu-1), MPI_UNSIGNED_CHAR, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        printf("matrizservLocal11111111111: %d\n", local1[1][1]);      
+        MPI_Recv(local1, (fila)*(colu-1), MPI_UNSIGNED_CHAR, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);  
         
         //LEEN
         
@@ -391,7 +388,8 @@ main(int argc, char* argv[]) {
             }
         }*/
 
-
+        printf("Archivos DilatacionThread$n.pgm satisfactoriamente creados\n");
+        
     }
 
     /* Shut down MPI */

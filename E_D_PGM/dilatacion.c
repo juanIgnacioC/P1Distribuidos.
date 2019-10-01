@@ -158,12 +158,9 @@ main(int argc, char* argv[]) {
         unsigned char local1[1000][1000], local2[1000][1000];
         
         MPI_Recv(local1, (fila)/2*(colu-1), MPI_UNSIGNED_CHAR, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        printf("matrizservLocal11111111111: %d\n", local1[1][1]);
-                
+                        
         
         MPI_Recv(local2, (fila)/2*(colu-1), MPI_UNSIGNED_CHAR, 2, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        printf("matrizservLocal2222222222: %d\n", local2[1][1]);
-        //printf("servPrev!!: %d\n", otra[174][1]);
         
         int rango1 = (fila)/2;
         for(i=0; i<fila; i++){
@@ -190,6 +187,8 @@ main(int argc, char* argv[]) {
                 fprintf(sali,"%c",otra[i][j]);
             }
         }
+        printf("\n");
+        printf("Archivo dilatacionNuevo.pgm satisfactoriamente creado\n");
     }
 
     /* Shut down MPI */
