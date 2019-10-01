@@ -80,11 +80,11 @@ main(int argc, char* argv[]) {
         printf("%d primer elemento estructurante\n", my_rank);
         unsigned char local1[1000][1000];
         
-        // Proceso	- Erosion - Primer elemento estructurante
+        // Proceso	- Dilataccion - Primer elemento estructurante
         int rango1 = (fila);
         for(i=1; i<rango1-1; i++){
             for(j=1; j<colu-1; j++){
-                int min =255;
+                int max =0;
                 int k[3];
                 k[0] = dibu[i-1][j-1];
                 k[1] = dibu[i][j-1];
@@ -94,12 +94,12 @@ main(int argc, char* argv[]) {
                 int l;
                 for(l=0;l<3;l++){
                     //printf("k: %d", k[l]);
-                    if(k[l]<min){
-                        min = k[l];
+                    if(k[l]>max){
+                        max = k[l];
                     }
                 }
 //                 printf("minimo: %d\n", min);
-                local1[i-1][j-1]=min;
+                local1[i-1][j-1]=max;
                 
                     //printf("%d primin\n", min);
             }
@@ -116,11 +116,11 @@ main(int argc, char* argv[]) {
         
         unsigned char local2[1000][1000];
         
-        // Proceso	- Erosion - Segundo elemento estructurante
+        // Proceso	- Dilatacion - Segundo elemento estructurante
         int rango2 = (fila);
         for(i=1; i<fila-1; i++){
             for(j=1; j<colu-1; j++){
-                int min =255;
+                int max =0;
                 int k[3];
 
                 //k[0] = dibu[i][j-1];
@@ -132,12 +132,12 @@ main(int argc, char* argv[]) {
                 int l;
                 for(l=0;l<3;l++){
                     //printf("k: %d", k[l]);
-                    if(k[l]<min){
-                        min = k[l];
+                    if(k[l]>max){
+                        max = k[l];
                     }
                 }
 //                 printf("minimo: %d\n", min);
-                local2[i][j-1]=min;
+                local2[i][j-1]=max;
                 
                     //printf("%d primin\n", min);
             }
@@ -153,11 +153,11 @@ main(int argc, char* argv[]) {
         
         unsigned char local3[1000][1000];
         
-        // Proceso	- Erosion - Tercer elemento estructurante
+        // Proceso	- Dilatacion - Tercer elemento estructurante
         int rango3 = (fila);
         for(i=1; i<fila-1; i++){
             for(j=1; j<colu-1; j++){
-                int min =255;
+                int max =0;
                 int k[3];
 
                 //k[0] = dibu[i][j-1];
@@ -169,12 +169,12 @@ main(int argc, char* argv[]) {
                 int l;
                 for(l=0;l<3;l++){
                     //printf("k: %d", k[l]);
-                    if(k[l]<min){
-                        min = k[l];
+                    if(k[l]>max){
+                        max = k[l];
                     }
                 }
 //                 printf("minimo: %d\n", min);
-                local3[i][j-1]=min;
+                local3[i][j-1]=max;
                 
                     //printf("%d primin\n", min);
             }
@@ -190,11 +190,11 @@ main(int argc, char* argv[]) {
         
         unsigned char local4[1000][1000];
         
-        // Proceso	- Erosion - Cuarto elemento estructurante
+        // Proceso	- Dilatacion - Cuarto elemento estructurante
         int rango4 = (fila);
         for(i=1; i<fila-1; i++){
             for(j=1; j<colu-1; j++){
-                int min =255;
+                int max =0;
                 int k[2];
 
                 //k[0] = dibu[i][j-1];
@@ -206,12 +206,12 @@ main(int argc, char* argv[]) {
                 int l;
                 for(l=0;l<2;l++){
                     //printf("k: %d", k[l]);
-                    if(k[l]<min){
-                        min = k[l];
+                    if(k[l]>max){
+                        max = k[l];
                     }
                 }
 //                 printf("minimo: %d\n", min);
-                local4[i-1][j-1]=min;
+                local4[i-1][j-1]=max;
                 
                     //printf("%d primin\n", min);
             }
@@ -227,11 +227,11 @@ main(int argc, char* argv[]) {
         
         unsigned char local5[1000][1000];
         
-        // Proceso	- Erosion - Cuarto elemento estructurante
+        // Proceso	- Dilatacion - Cuarto elemento estructurante
         int rango5 = (fila);
         for(i=1; i<fila-1; i++){
             for(j=1; j<colu-1; j++){
-                int min =255;
+                int max =0;
                 int k[5];
 
                 k[0] = dibu[i-1][j-1];
@@ -245,12 +245,12 @@ main(int argc, char* argv[]) {
                 int l;
                 for(l=0;l<5;l++){
                     //printf("k: %d", k[l]);
-                    if(k[l]<min){
-                        min = k[l];
+                    if(k[l]>max){
+                        max = k[l];
                     }
                 }
 //                 printf("minimo: %d\n", min);
-                local5[i][j]=min;
+                local5[i][j]=max;
                 
                     //printf("%d primin\n", min);
             }
@@ -285,7 +285,7 @@ main(int argc, char* argv[]) {
             }
         }
 
-        sali=fopen("erosionThread1.pgm","wb");
+        sali=fopen("DilatacionThread1.pgm","wb");
         fprintf(sali,"P5\n");
         fprintf(sali,"# Creado por Juan Cordero y Alvaro Elgueda.\n");
         fprintf(sali,"%d %d\n",colu,fila);
@@ -306,7 +306,7 @@ main(int argc, char* argv[]) {
                 otra2[i][j] = local2[i][j];
             }
         }
-        sali2=fopen("erosionThread2.pgm","wb");
+        sali2=fopen("DilatacionThread2.pgm","wb");
         fprintf(sali2,"P5\n");
         fprintf(sali2,"# Creado por Juan Cordero y Alvaro Elgueda.\n");
         fprintf(sali2,"%d %d\n",colu,fila);
@@ -324,7 +324,7 @@ main(int argc, char* argv[]) {
                 otra3[i][j] = local3[i][j];
             }
         }
-        sali3=fopen("erosionThread3.pgm","wb");
+        sali3=fopen("DilatacionThread3.pgm","wb");
         fprintf(sali3,"P5\n");
         fprintf(sali3,"# Creado por Juan Cordero y Alvaro Elgueda.\n");
         fprintf(sali3,"%d %d\n",colu,fila);
@@ -342,7 +342,7 @@ main(int argc, char* argv[]) {
                 otra4[i][j] = local4[i][j];
             }
         }
-        sali4=fopen("erosionThread3.pgm","wb");
+        sali4=fopen("DilatacionThread3.pgm","wb");
         fprintf(sali4,"P5\n");
         fprintf(sali4,"# Creado por Juan Cordero y Alvaro Elgueda.\n");
         fprintf(sali4,"%d %d\n",colu,fila);
@@ -360,7 +360,7 @@ main(int argc, char* argv[]) {
                 otra5[i][j] = local5[i][j];
             }
         }
-        sali5=fopen("erosionThread4.pgm","wb");
+        sali5=fopen("DilatacionThread4.pgm","wb");
         fprintf(sali5,"P5\n");
         fprintf(sali5,"# Creado por Juan Cordero y Alvaro Elgueda.\n");
         fprintf(sali5,"%d %d\n",colu,fila);
@@ -379,7 +379,7 @@ main(int argc, char* argv[]) {
         //SALIDAS
         
 
-        /*sali=fopen("erosionThread5.pgm","wb");
+        /*sali=fopen("DilatacionThread5.pgm","wb");
         fprintf(sali,"P5\n");
         fprintf(sali,"# Creado por Juan Cordero y Alvaro Elgueda.\n");
         fprintf(sali,"%d %d\n",colu,fila);
